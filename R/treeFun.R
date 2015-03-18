@@ -1,15 +1,9 @@
 ## treeFun.R
 
-make_tree <- function(d, id = "id", parent = "parent", label = "label",
-                      root_parent = "-")
+make_tree <- function(d, id = "id", parent = "parent", label = "label")
 {
-    root_id <- NA
-
     make_node <- function(x)
     {
-        if (x[[parent]] == root_parent)
-            root_id <<- x[[id]]         # remember root id
-
         list(id       = as.character(x[[id]]),
              parent   = as.character(x[[parent]]),
              children = character(0L),
@@ -18,18 +12,24 @@ make_tree <- function(d, id = "id", parent = "parent", label = "label",
 
     ## Create nodes.
     nodes <- apply(d, 1L, make_node)
-    names(nodes) <- as.character(d[[id]])
+    node_ids <- as.character(d[[id]])
+    names(nodes) <- node_ids
 
-    ## Add children to parent nodes.
+    ## Add children to parent nodes and find root node.
+    root <- NA
     for (child in names(nodes)) {
-        if (child == root_id)
-            next
         parent <- nodes[[child]]$parent
+        ## The root is the only node that doesn't have a parent in the
+        ## tree.
+        if (! parent %in% node_ids) {
+            root <- child
+            next
+        }
         children <- nodes[[parent]]$children
         nodes[[parent]]$children <- c(child, children)
     }
 
-    list(root = root_id, nodes = nodes, root_parent = root_parent)
+    list(root = root, nodes = nodes)
 }
 
 print_nodes <- function(tree)
@@ -76,8 +76,8 @@ tree2dot <- function(tree, filename)
 
 induced_tree <- function(ids, tree)
 {
-    root_parent <- tree$root_parent
-    nodes       <- tree$nodes
+    nodes <- tree$nodes
+    node_ids <- names(nodes)
 
     f <- function(id, visited)
     {
@@ -86,7 +86,7 @@ induced_tree <- function(ids, tree)
 
         visited <- c(id, visited)       # add id to visited nodes
 
-        if (nodes[[id]]$parent == root_parent) # reached root node
+        if (! nodes[[id]]$parent %in% node_ids) # reached root node
             return(visited)
 
         f(nodes[[id]]$parent, visited)
@@ -101,28 +101,17 @@ induced_tree <- function(ids, tree)
     make_tree(data.frame(
         id     = visited,
         parent = sapply(nodes[visited], `[[`, "parent"),
-        label  = sapply(nodes[visited], `[[`, "label")),
-              root_parent = root_parent)
+        label  = sapply(nodes[visited], `[[`, "label")))
 }
 
-## So far overlap_tree only works if all trees have the same root.  In
-## principle, it should also work for arbitrary overlapping trees as
-## long as no tree is empty.  The difficulty in that case would be to
-## find the root_parent of the overlap tree which is needed in the
-## call to make_tree.  We know that it's one of the root_parents of
-## the trees that we overlap.  But which?
 overlap_tree <- function(trees)
 {
-    ## All trees must have the same root.
-    stopifnot(all_neighbors(`==`, sapply(trees, `[[`, "root")))
-
     common_nodes <- Reduce(intersect,
                            lapply(trees, function(x) names(x$nodes)))
     make_tree(data.frame(
         id = common_nodes,
         parent = sapply(trees[[1]]$nodes[common_nodes], `[[`, "parent"),
-        label  = sapply(trees[[1]]$nodes[common_nodes], `[[`, "label")),
-              root_parent = trees[[1]]$root_parent)
+        label  = sapply(trees[[1]]$nodes[common_nodes], `[[`, "label")))
 }
 
 nodes <- function(tree)

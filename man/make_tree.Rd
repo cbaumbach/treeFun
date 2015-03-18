@@ -8,8 +8,7 @@
   Convert data frame to tree structure.
 }
 \usage{
-make_tree(d, id = "id", parent = "parent", label = "label",
-         root_parent = "-")
+make_tree(d, id = "id", parent = "parent", label = "label")
 }
 \arguments{
   \item{d}{
@@ -23,9 +22,6 @@ make_tree(d, id = "id", parent = "parent", label = "label",
   }
   \item{label}{
     Name of column in "d" with node labels.
-  }
-  \item{root_parent}{
-    Parent node id of root node.
   }
 }
 \value{
