@@ -1,6 +1,6 @@
 context("Converting data frames into trees")
 
-test_that("it works for different kind of predicates", {
+test_that("transforming forth and back works", {
     d <- read.table(textConnection("\
 id parent label
 0 - a
