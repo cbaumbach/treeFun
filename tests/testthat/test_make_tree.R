@@ -76,4 +76,6 @@ id parent label
     expect_that(itr2, equals(make_tree(d[c("0", "2", "7", "8"),])))
     expect_that(itr3, equals(make_tree(d[c("0", "2", "7"),])))
     expect_that(itr4, equals(make_tree(d[c("0", "1", "3"),])))
+    expect_that(itr5, equals(make_tree(d[c("0", "1", "3", "4"),])))
+    expect_that(itr6, equals(make_tree(d[c("0", "1", "5", "2", "6"),])))
 })
