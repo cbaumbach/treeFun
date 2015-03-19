@@ -32,9 +32,6 @@ tree2dot(tree, filename)
 \seealso{
   \code{\link{make_tree}}
 }
-\references{
-
-}
 \examples{
 library(treeFun)
 
