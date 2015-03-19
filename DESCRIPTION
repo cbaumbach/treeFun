@@ -7,7 +7,7 @@ Date: 2015-03-17
 Author: Clemens Baumbach
 Maintainer: Clemens Baumbach <clemens.baumbach@helmholtz-muenchen.de>
 Suggests: testthat
-Imports: miscFun (>= 1.0)
+Depends: miscFun (>= 1.0)
 Description: This is a collection of functions for creating,
              manipulating, and plotting tree structures.
 License: GPL (>= 2)
