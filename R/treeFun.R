@@ -1,11 +1,12 @@
 ## treeFun.R
 
-make_tree <- function(d, id = "id", parent = "parent", label = "label")
+make_tree <- function(d, id = "id", parent = "parent", label = "label",
+                      parent_sep = ",")
 {
     make_node <- function(x)
     {
         list(id       = as.character(x[[id]]),
-             parent   = as.character(x[[parent]]),
+             parent   = split_parents(x[[parent]], parent_sep),
              children = character(0L),
              label    = as.character(x[[label]]))
     }
@@ -18,15 +19,16 @@ make_tree <- function(d, id = "id", parent = "parent", label = "label")
     ## Add children to parent nodes and find root node.
     root <- NA
     for (child in names(nodes)) {
-        parent <- nodes[[child]]$parent
-        ## The root is the only node that doesn't have a parent in the
-        ## tree.
-        if (! parent %in% node_ids) {
-            root <- child
-            next
+        for (parent in nodes[[child]]$parent) {
+            ## The root is the only node that doesn't have a parent in
+            ## the tree.
+            if (! parent %in% node_ids) {
+                root <- child
+                next
+            }
+            children <- nodes[[parent]]$children
+            nodes[[parent]]$children <- c(child, children)
         }
-        children <- nodes[[parent]]$children
-        nodes[[parent]]$children <- c(child, children)
     }
 
     list(root = root, nodes = nodes)
@@ -34,8 +36,16 @@ make_tree <- function(d, id = "id", parent = "parent", label = "label")
 
 print_nodes <- function(tree)
 {
+    visited <- character(0L)
+
     f <- function(root, nodes)
     {
+        ## Don't print twice.
+        if (root %in% visited)
+            return()
+        else
+            visited <<- c(root, visited)
+
         ## Print current node.
         node <- nodes[[root]]
         pr(root, "[label=\"", node$label, "\"];")
@@ -74,6 +84,16 @@ tree2dot <- function(tree, filename)
     sink()
 }
 
+split_parents <- function(parents, parent_sep = ",")
+{
+    unlist(strsplit(as.character(parents), parent_sep))
+}
+
+combine_parents <- function(parents, parent_sep = ",")
+{
+    paste0(sort(parents), collapse = parent_sep)
+}
+
 induced_tree <- function(ids, tree)
 {
     nodes <- tree$nodes
@@ -86,10 +106,14 @@ induced_tree <- function(ids, tree)
 
         visited <- c(id, visited)       # add id to visited nodes
 
-        if (! nodes[[id]]$parent %in% node_ids) # reached root node
+        parents <- nodes[[id]]$parent
+        if (! parents[1L] %in% node_ids) # reached root node
             return(visited)
 
-        f(nodes[[id]]$parent, visited)
+        for (pid in parents)            # visit parent nodes
+            visited <- f(pid, visited)
+
+        return(visited)
     }
 
     ## Find upstream nodes.
@@ -100,7 +124,7 @@ induced_tree <- function(ids, tree)
     ## Build subtree from upstream nodes.
     make_tree(data.frame(
         id     = visited,
-        parent = sapply(nodes[visited], `[[`, "parent"),
+        parent = sapply(lapply(nodes[visited], `[[`, "parent"), combine_parents),
         label  = sapply(nodes[visited], `[[`, "label")))
 }
 
@@ -110,7 +134,7 @@ overlap_tree <- function(trees)
                            lapply(trees, function(x) names(x$nodes)))
     make_tree(data.frame(
         id = common_nodes,
-        parent = sapply(trees[[1]]$nodes[common_nodes], `[[`, "parent"),
+        parent = sapply(lapply(trees[[1]]$nodes[common_nodes], `[[`, "parent"), combine_parents),
         label  = sapply(trees[[1]]$nodes[common_nodes], `[[`, "label")))
 }
 
@@ -123,7 +147,7 @@ edges <- function(tree)
 {
     data.frame(
         id     = names(tree$nodes),
-        parent = sapply(tree$nodes, `[[`, "parent"),
+        parent = sapply(lapply(tree$nodes, `[[`, "parent"), combine_parents),
         stringsAsFactors = FALSE)
 }
 

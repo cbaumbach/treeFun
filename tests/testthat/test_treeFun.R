@@ -153,4 +153,10 @@ id parent label
     tr <- make_tree(d)
 
     expect_that(tree_equal(induced_tree("5", tr), make_tree(d[c("0", "1", "2", "5", "6"),])), is_true())
+    expect_that(tree_equal(overlap_tree(list(tr, tr)), tr), is_true())
+    expect_that(tree_equal(overlap_tree(list(tr, tr, tr, tr)), tr), is_true())
+    expect_that(tree_equal(overlap_tree(list(induced_tree("5", tr), tr)), induced_tree("5", tr)), is_true())
+    expect_that(tree_equal(overlap_tree(list(tr, tr, induced_tree("5", tr), tr)), induced_tree("5", tr)), is_true())
+    expect_that(tree_equal(overlap_tree(list(induced_tree("5", tr), induced_tree("6", tr))), induced_tree("6", tr)), is_true())
+    expect_that(tree_equal(overlap_tree(list(induced_tree("3", tr), induced_tree("8", tr))), induced_tree("1", tr)), is_true())
 })
