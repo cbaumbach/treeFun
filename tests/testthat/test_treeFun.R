@@ -1,6 +1,6 @@
-context("Converting data frames into trees")
+context("Working with tree structures.")
 
-test_that("transforming forth and back works", {
+test_that("transforming from and to data frames works", {
     d <- read.table(textConnection("\
 id parent label
 0 - a
