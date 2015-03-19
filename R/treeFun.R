@@ -126,3 +126,15 @@ edges <- function(tree)
         parent = sapply(tree$nodes, `[[`, "parent"),
         stringsAsFactors = FALSE)
 }
+
+tree_equal <- function(tree1, tree2)
+{
+    ## Two trees are equal if they have the same edges.
+    edg1 <- edges(tree1)
+    edg2 <- edges(tree2)
+
+    edg1 <- edg1[order(edg1$id, edg1$parent),]
+    edg2 <- edg2[order(edg2$id, edg2$parent),]
+
+    identical(edg1, edg2)
+}

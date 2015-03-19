@@ -36,6 +36,50 @@ id parent label
     expect_that(identical(edg[order(edg$id),], d[order(d$id), c("id", "parent")]), is_true())
 })
 
+test_that("tree comparisons work", {
+    d1 <- read.table(textConnection("\
+id parent label
+0 - a
+1 0 b
+2 0 c
+3 1 d
+4 1 e
+5 1 f
+6 2 g
+7 2 h
+8 7 i
+"), header = TRUE, stringsAsFactors = FALSE,
+        colClasses = "character")
+
+    ##         0a
+    ##        / \
+    ##      /     \
+    ##    1b       2c
+    ##   /|\      / \
+    ##  / | \    /   \
+    ## 3d 4e 5f 6g    7h
+    ##                 \
+    ##                  \
+    ##                   8i
+
+    d2 <- d1
+    d2$label <- toupper(d1$label)
+    d2 <- d2[sample.int(nrow(d2)),]
+
+    ## d2 has the same structure as d1 but its labels are in uppercase
+    ## and its rows are permuted.
+
+    d3 <- d1[-nrow(d1),]                # d1 without the "8" node
+
+    tr1 <- make_tree(d1)
+    tr2 <- make_tree(d2)
+    tr3 <- make_tree(d3)
+
+    expect_that(tree_equal(tr1, tr2), is_true())
+    expect_that(tree_equal(tr1, tr3), is_false())
+    expect_that(tree_equal(tr2, tr3), is_false())
+})
+
 test_that("induced and overlap trees work", {
     d <- read.table(textConnection("\
 id parent label

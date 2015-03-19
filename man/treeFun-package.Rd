@@ -25,6 +25,7 @@ Index:
   make_tree     Convert data frame to tree structure
   nodes         Extract nodes of tree object
   overlap_tree  Find common subtree
+  tree_equal    Test if two trees have the same edges
   tree2dot      Write tree to dot file
 }
 }
@@ -68,7 +69,18 @@ id parent label
 ##                  \
 ##                   8i
 
+d2 <- d
+d2$label <- toupper(d$label)
+d2 <- d2[sample.int(nrow(d2)),]
+
+## d2 has the same structure as d1 but its labels are in uppercase and
+## its rows are permuted.
+
 tr <- make_tree(d)
+tr2 <- make_tree(d2)
+
+tree_equal(tr, tr2)
+
 nodes(tr)
 edges(tr)
 
