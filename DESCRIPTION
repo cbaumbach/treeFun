@@ -1,6 +1,7 @@
 Package: treeFun
 Type: Package
 Title: Functions for dealing with tree structures
+SystemRequirements: Graphviz
 Version: 1.0
 Date: 2015-03-17
 Author: Clemens Baumbach

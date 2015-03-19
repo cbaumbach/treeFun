@@ -5,7 +5,11 @@
   Write tree to dot file.
 }
 \description{
-  Write tree to dot file.
+  Write tree to dot file.  This is basically a wrapper around the
+  "print_tree" function that writes the dot format representation of the
+  given tree to a file for later conversion into a picture using tools
+  from the open source graph visualization software Graphviz
+  (www.graphviz.org).
 }
 \usage{
 tree2dot(tree, filename)
@@ -19,10 +23,17 @@ tree2dot(tree, filename)
   }
 }
 \value{
-  None.
+  Produces a file in dot format that can be converted into a picture
+  using tools from the open source graph visualization software Graphviz
+  (www.graphviz.org).  For example, to convert the file "foo.dot" into
+  the png file "foo.dot.png" you could run "dot -Tpng -O foo.dot" from
+  the command line.
 }
 \seealso{
   \code{\link{make_tree}}
+}
+\references{
+
 }
 \examples{
 library(treeFun)

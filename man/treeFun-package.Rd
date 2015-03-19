@@ -7,7 +7,9 @@ Functions for dealing with genetic data
 }
 \description{
 This is a collection of functions for creating, manipulation, and
-plotting tree structures.
+plotting tree structures.  If you want to convert your trees into
+displayable file formats, you will need the open source graph
+visualization software Graphviz (www.graphviz.org).
 }
 \details{
 \tabular{ll}{
@@ -35,13 +37,16 @@ Clemens Baumbach
 Maintainer: Clemens Baumbach <clemens.baumbach@helmholtz-muenchen.de>
 }
 \references{
-none
+Graphviz (open source graph visualization software, \url{www.graphviz.org}).
 }
 \keyword{ manip }
 \keyword{ attribute }
 \keyword{ list }
 \keyword{ utilities }
 \keyword{ package }
+\seealso{
+  \code{\link{tree2dot}}
+}
 \examples{
 library(treeFun)
 
