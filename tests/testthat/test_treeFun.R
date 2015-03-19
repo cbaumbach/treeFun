@@ -12,8 +12,7 @@ id parent label
 6 2 g
 7 2 h
 8 7 i
-"), header = TRUE, stringsAsFactors = FALSE,
-        colClasses = "character")
+"), header = TRUE, stringsAsFactors = FALSE, colClasses = "character")
 
     ##         0a
     ##        / \
@@ -48,8 +47,7 @@ id parent label
 6 2 g
 7 2 h
 8 7 i
-"), header = TRUE, stringsAsFactors = FALSE,
-        colClasses = "character")
+"), header = TRUE, stringsAsFactors = FALSE, colClasses = "character")
 
     ##         0a
     ##        / \
@@ -92,8 +90,7 @@ id parent label
 6 2 g
 7 2 h
 8 7 i
-"), header = TRUE, stringsAsFactors = FALSE,
-                    colClasses = "character")
+"), header = TRUE, stringsAsFactors = FALSE, colClasses = "character")
 
     ##         0a
     ##        / \
