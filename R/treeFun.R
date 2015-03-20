@@ -1,5 +1,7 @@
 ## treeFun.R
 
+root_marker <- "root"
+
 make_tree <- function(d, id = "id", parent = "parent", label = id,
                       parent_sep = ",")
 {
@@ -19,19 +21,31 @@ make_tree <- function(d, id = "id", parent = "parent", label = id,
     ## Add children to parent nodes and find root node.
     root <- NA
     for (child in names(nodes)) {
-        for (parent in nodes[[child]]$parent) {
-            ## The root is the only node that doesn't have a parent in
-            ## the tree.
-            if (! parent %in% node_ids) {
-                root <- child
-                next
-            }
-            children <- nodes[[parent]]$children
-            nodes[[parent]]$children <- c(child, children)
+        pids <- nodes[[child]]$parent
+        ## Only root has none of its parents in the tree.
+        if (!any(pids %in% node_ids)) {
+            if (is.na(child))
+                stop("Root node id is missing (NA).")
+            if (!is.na(root))
+                stop("Found >=1 root node: ", root, ", ", child)
+            root <- child
+            nodes[[root]]$root <- TRUE  # add root marker
+            next
         }
+
+        for (pid in pids)
+            nodes[[pid]]$children <- c(child, nodes[[pid]]$children)
     }
 
+    if (is.na(root))
+        stop("Couldn't find root node.")
+
     list(root = root, nodes = nodes)
+}
+
+is_root <- function(node)
+{
+    root_marker %in% names(node)
 }
 
 print_nodes <- function(tree)
@@ -106,9 +120,10 @@ induced_tree <- function(ids, tree)
 
         visited <- c(id, visited)       # add id to visited nodes
 
-        parents <- nodes[[id]]$parent
-        if (! parents[1L] %in% node_ids) # reached root node
-            return(visited)
+        node <- nodes[[id]]
+        parents <- node$parent
+        if (is_root(node))              # reached root node
+            return()
 
         for (pid in parents)            # visit parent nodes
             visited <- f(pid, visited)
