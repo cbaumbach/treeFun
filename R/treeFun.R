@@ -22,6 +22,8 @@ make_tree <- function(d, id = "id", parent = "parent", label = id,
     root <- NA
     for (child in names(nodes)) {
         pids <- nodes[[child]]$parent
+        ## Ignore parents that are not part of the tree.
+        pids <- pids[pids %in% node_ids]
         ## Only root has none of its parents in the tree.
         if (!any(pids %in% node_ids)) {
             if (is.na(child))
