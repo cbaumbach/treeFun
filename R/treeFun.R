@@ -50,25 +50,25 @@ is_root <- function(node)
 
 print_nodes <- function(tree)
 {
+    nodes <- tree$nodes
     visited <- character(0L)
 
-    f <- function(root, nodes)
+    f <- function(id)
     {
         ## Don't print twice.
-        if (root %in% visited)
+        if (id %in% visited)
             return()
-        else
-            visited <<- c(root, visited)
+        visited <<- c(id, visited)
 
         ## Print current node.
-        node <- nodes[[root]]
-        pr(root, "[label=\"", node$label, "\"];")
+        node <- nodes[[id]]
+        pr(id, "[label=\"", node$label, "\"];")
 
         ## Print child nodes.
         for (child in node$children)
-            f(child, nodes)
+            f(child)
     }
-    f(tree$root, tree$nodes)
+    f(tree$root)
 }
 
 print_edges <- function(tree)
@@ -111,14 +111,14 @@ combine_parents <- function(parents, parent_sep = ",")
 induced_tree <- function(ids, tree)
 {
     nodes <- tree$nodes
-    node_ids <- names(nodes)
+    visited <- character()
 
-    f <- function(id, visited)
+    f <- function(id)
     {
         if (id %in% visited)            # already been here
-            return(visited)
+            return()
 
-        visited <- c(id, visited)       # add id to visited nodes
+        visited <<- c(id, visited)      # add id to visited nodes
 
         node <- nodes[[id]]
         parents <- node$parent
@@ -126,15 +126,12 @@ induced_tree <- function(ids, tree)
             return()
 
         for (pid in parents)            # visit parent nodes
-            visited <- f(pid, visited)
-
-        return(visited)
+            f(pid)
     }
 
     ## Find upstream nodes.
-    visited <- character(0L)
     for (id in ids)
-        visited <- f(id, visited)
+        f(id)
 
     ## Build subtree from upstream nodes.
     make_tree(data.frame(
