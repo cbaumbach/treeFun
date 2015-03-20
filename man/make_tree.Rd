@@ -8,7 +8,7 @@
   Convert data frame to tree structure.
 }
 \usage{
-make_tree(d, id = "id", parent = "parent", label = "label",
+make_tree(d, id = "id", parent = "parent", label = id,
           parent_sep = ",")
 }
 \arguments{

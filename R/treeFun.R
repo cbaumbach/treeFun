@@ -1,6 +1,6 @@
 ## treeFun.R
 
-make_tree <- function(d, id = "id", parent = "parent", label = "label",
+make_tree <- function(d, id = "id", parent = "parent", label = id,
                       parent_sep = ",")
 {
     make_node <- function(x)
