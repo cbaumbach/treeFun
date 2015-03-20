@@ -176,3 +176,30 @@ tree_equal <- function(tree1, tree2)
 
     identical(edg1, edg2)
 }
+
+extract_tree <- function(tree, depth, from = tree$root)
+{
+    if (missing(depth))
+        stop("Missing DEPTH argument.")
+
+    depth <- as.integer(depth)
+    if (is.na(depth) || depth <= 0L)
+        stop("DEPTH must be >= 1L.")
+
+    nodes <- tree$nodes
+    visited <- character()
+    f <- function(root, n)
+    {
+        if (root %in% visited) return()
+        visited <<- c(root, visited)
+        if (n == 1L) return()
+        for (child in nodes[[root]]$children)
+            f(child, n - 1L)
+    }
+    f(as.character(from), depth)
+    make_tree(data.frame(
+        id     = visited,
+        parent = sapply(lapply(tree$nodes[visited], `[[`, "parent"), combine_parents),
+        label  = sapply(tree$nodes[visited], `[[`, "label")),
+              label = "label")
+}

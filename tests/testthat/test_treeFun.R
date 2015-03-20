@@ -160,3 +160,41 @@ id parent label
     expect_that(tree_equal(overlap_tree(list(induced_tree("5", tr), induced_tree("6", tr))), induced_tree("6", tr)), is_true())
     expect_that(tree_equal(overlap_tree(list(induced_tree("3", tr), induced_tree("8", tr))), induced_tree("1", tr)), is_true())
 })
+
+test_that("downstream extracting of subtrees works", {
+    d <- read.table(textConnection("\
+id parent label
+0 - a
+1 0 b
+2 0 c
+3 1 d
+4 1 e
+5 1,6 f
+6 2 g
+7 2,1 h
+8 7 i
+"), header = TRUE, stringsAsFactors = FALSE, colClasses = "character")
+
+    ##         0a
+    ##        / \
+    ##      /     \
+    ##    1b       2c
+    ##   /|\\____ /_\___
+    ##  / | \    /   \ v
+    ## 3d 4e 5f 6g    7h
+    ##       ^   |     \
+    ##       |___|      \
+    ##                   8i
+    ##
+    ## 1 is parent of 7
+    ## 6 is parent of 5
+
+    rownames(d) <- d$id
+    tr <- make_tree(d)
+
+    expect_that(tree_equal(extract_tree(tr, 2), make_tree(d[c("0", "1", "2"),])), is_true())
+    expect_that(tree_equal(extract_tree(tr, 2, 1), make_tree(d[c("1", "3", "4", "5", "7"),])), is_true())
+    expect_that(tree_equal(extract_tree(tr, 3), make_tree(d[c("0", "1", "2", "3", "4", "5", "6", "7"),])), is_true())
+    expect_that(tree_equal(extract_tree(tr, 3, 8), make_tree(d["8",])), is_true())
+    expect_that(tree_equal(extract_tree(tr, 999), tr), is_true())
+})

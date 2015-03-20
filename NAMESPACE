@@ -1,6 +1,7 @@
 import(miscFun)
 
 export("edges",
+       "extract_tree",
        "induced_tree",
        "make_tree",
        "nodes",

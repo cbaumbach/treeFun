@@ -23,6 +23,7 @@ License: \tab GPL (>= 2)\cr
 Index:
 \preformatted{
   edges         Extract edges of tree object
+  extract_tree  Downstream extraction of subtrees
   induced_tree  Build tree induced by set of node ids
   make_tree     Convert data frame to tree structure
   nodes         Extract nodes of tree object
@@ -74,6 +75,8 @@ id parent label
 ##                  \
 ##                   8i
 
+rownames(d) <- d$id
+
 d2 <- d
 d2$label <- toupper(d$label)
 d2 <- d2[sample.int(nrow(d2)),]
@@ -85,6 +88,9 @@ tr <- make_tree(d)
 tr2 <- make_tree(d2)
 
 tree_equal(tr, tr2)
+
+stopifnot(tree_equal(extract_tree(tr, 999), tr))
+stopifnot(tree_equal(extract_tree(tr, 2, from = 1), make_tree(d[c("1", "3", "4", "5"), ])))
 
 nodes(tr)
 edges(tr)
