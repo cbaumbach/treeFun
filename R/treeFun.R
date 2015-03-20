@@ -64,7 +64,7 @@ print_nodes <- function(tree)
 
         ## Print current node.
         node <- nodes[[id]]
-        pr(id, "[label=\"", node$label, "\"];")
+        pr("\"", id, "\"", "[label=\"", node$label, "\"];")
 
         ## Print child nodes.
         for (child in node$children)
@@ -78,7 +78,7 @@ print_edges <- function(tree)
     f <- function(root, nodes)
     {
         for (child in nodes[[root]]$children) {
-            pr(root, "->", child, ";")
+            pr("\"", root, "\"->\"", child, "\";")
             f(child, nodes)
         }
     }
