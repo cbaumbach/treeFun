@@ -2,13 +2,13 @@
 
 root_marker <- "root"
 
-make_tree <- function(d, id = "id", parent = "parent", label = id,
+make_tree <- function(d, id = "id", parents = "parents", label = id,
                       parent_sep = ",")
 {
     make_node <- function(x)
     {
         list(id       = as.character(x[[id]]),
-             parent   = split_parents(x[[parent]], parent_sep),
+             parents  = split_parents(x[[parents]], parent_sep),
              children = character(0L),
              label    = as.character(x[[label]]))
     }
@@ -21,7 +21,7 @@ make_tree <- function(d, id = "id", parent = "parent", label = id,
     ## Add children to parent nodes and find root node.
     root <- NA
     for (child in names(nodes)) {
-        pids <- nodes[[child]]$parent
+        pids <- nodes[[child]]$parents
         ## Ignore parents that are not part of the tree.
         pids <- pids[pids %in% node_ids]
         ## Only root has none of its parents in the tree.
@@ -123,7 +123,7 @@ induced_tree <- function(ids, tree)
         visited <<- c(id, visited)      # add id to visited nodes
 
         node <- nodes[[id]]
-        parents <- node$parent
+        parents <- node$parents
         if (is_root(node))              # reached root node
             return()
 
@@ -137,9 +137,9 @@ induced_tree <- function(ids, tree)
 
     ## Build subtree from upstream nodes.
     make_tree(data.frame(
-        id     = visited,
-        parent = sapply(lapply(nodes[visited], `[[`, "parent"), combine_parents),
-        label  = sapply(nodes[visited], `[[`, "label")))
+        id      = visited,
+        parents = sapply(lapply(nodes[visited], `[[`, "parents"), combine_parents),
+        label   = sapply(nodes[visited], `[[`, "label")))
 }
 
 overlap_tree <- function(trees)
@@ -147,9 +147,9 @@ overlap_tree <- function(trees)
     common_nodes <- Reduce(intersect,
                            lapply(trees, function(x) names(x$nodes)))
     make_tree(data.frame(
-        id = common_nodes,
-        parent = sapply(lapply(trees[[1]]$nodes[common_nodes], `[[`, "parent"), combine_parents),
-        label  = sapply(trees[[1]]$nodes[common_nodes], `[[`, "label")))
+        id      = common_nodes,
+        parents = sapply(lapply(trees[[1]]$nodes[common_nodes], `[[`, "parents"), combine_parents),
+        label   = sapply(trees[[1]]$nodes[common_nodes], `[[`, "label")))
 }
 
 nodes <- function(tree)
@@ -160,8 +160,8 @@ nodes <- function(tree)
 edges <- function(tree)
 {
     data.frame(
-        id     = names(tree$nodes),
-        parent = sapply(lapply(tree$nodes, `[[`, "parent"), combine_parents),
+        id      = names(tree$nodes),
+        parents = sapply(lapply(tree$nodes, `[[`, "parents"), combine_parents),
         stringsAsFactors = FALSE)
 }
 
@@ -171,8 +171,8 @@ tree_equal <- function(tree1, tree2)
     edg1 <- edges(tree1)
     edg2 <- edges(tree2)
 
-    edg1 <- edg1[order(edg1$id, edg1$parent),]
-    edg2 <- edg2[order(edg2$id, edg2$parent),]
+    edg1 <- edg1[order(edg1$id, edg1$parents),]
+    edg2 <- edg2[order(edg2$id, edg2$parents),]
 
     identical(edg1, edg2)
 }
@@ -198,8 +198,8 @@ extract_tree <- function(tree, depth, from = tree$root)
     }
     f(as.character(from), depth)
     make_tree(data.frame(
-        id     = visited,
-        parent = sapply(lapply(tree$nodes[visited], `[[`, "parent"), combine_parents),
-        label  = sapply(tree$nodes[visited], `[[`, "label")),
+        id      = visited,
+        parents = sapply(lapply(tree$nodes[visited], `[[`, "parents"), combine_parents),
+        label   = sapply(tree$nodes[visited], `[[`, "label")),
               label = "label")
 }

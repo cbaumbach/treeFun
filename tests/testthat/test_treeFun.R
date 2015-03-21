@@ -2,7 +2,7 @@ context("Working with tree structures.")
 
 test_that("transforming from and to data frames works", {
     d <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c
@@ -32,12 +32,12 @@ id parent label
     rownames(d)   <- NULL
 
     expect_that(identical(sort(nodes(tr)), sort(d$id)), is_true())
-    expect_that(identical(edg[order(edg$id),], d[order(d$id), c("id", "parent")]), is_true())
+    expect_that(identical(edg[order(edg$id),], d[order(d$id), c("id", "parents")]), is_true())
 })
 
 test_that("tree comparisons work", {
     d1 <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c
@@ -80,7 +80,7 @@ id parent label
 
 test_that("induced and overlap trees work", {
     d <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c
@@ -123,7 +123,7 @@ id parent label
 
 test_that("children with multiple parents are handled correctly", {
     d <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c
@@ -163,7 +163,7 @@ id parent label
 
 test_that("downstream extracting of subtrees works", {
     d <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c

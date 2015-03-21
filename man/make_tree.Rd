@@ -8,7 +8,7 @@
   Convert data frame to tree structure.
 }
 \usage{
-make_tree(d, id = "id", parent = "parent", label = id,
+make_tree(d, id = "id", parents = "parents", label = id,
           parent_sep = ",")
 }
 \arguments{
@@ -18,7 +18,7 @@ make_tree(d, id = "id", parent = "parent", label = id,
   \item{id}{
     Name of column in "d" with node ids.
   }
-  \item{parent}{
+  \item{parents}{
     Name of column in "d" with parent node ids.
   }
   \item{label}{
@@ -35,7 +35,7 @@ make_tree(d, id = "id", parent = "parent", label = id,
 library(treeFun)
 
 d <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c

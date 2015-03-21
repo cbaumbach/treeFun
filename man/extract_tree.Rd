@@ -28,7 +28,7 @@ extract_tree(tree, depth, from = tree$root)
 library(treeFun)
 
 d <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c

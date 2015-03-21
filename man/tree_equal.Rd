@@ -30,7 +30,7 @@ tree_equal(tree1, tree2)
 library(treeFun)
 
 d1 <- read.table(textConnection("\
-id parent label
+id parents label
 0 - a
 1 0 b
 2 0 c
