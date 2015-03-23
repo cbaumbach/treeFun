@@ -50,6 +50,13 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL)
          ancestor   = ancestor)
 }
 
+make_derived_tree <- function(node_ids, tree)
+{
+    make_tree(tree$data[tree$data$id %in% node_ids, ],
+              parent_sep = tree$parent_sep,
+              ancestor = tree$ancestor)
+}
+
 is_root <- function(node)
 {
     root_marker %in% names(node)
@@ -164,9 +171,7 @@ induced_tree <- function(ids, tree)
         f(id)
 
     ## Build subtree from upstream nodes.
-    make_tree(tree$data[tree$data$id %in% visited, ],
-              parent_sep = tree$parent_sep,
-              ancestor = tree$ancestor)
+    make_derived_tree(visited, tree)
 }
 
 overlap_tree <- function(trees)
@@ -177,10 +182,7 @@ overlap_tree <- function(trees)
     common_nodes <- Reduce(intersect,
                            lapply(trees, function(x) names(x$nodes)))
 
-    d <- trees[[1L]]$data
-    make_tree(d[d$id %in% common_nodes, ],
-              parent_sep = trees[[1L]]$parent_sep,
-              ancestor = trees[[1L]]$ancestor)
+    make_derived_tree(common_nodes, trees[[1L]])
 }
 
 nodes <- function(tree)
@@ -226,7 +228,5 @@ extract_tree <- function(tree, depth, from = tree$root)
     }
     f(as.character(from), depth)
 
-    make_tree(tree$data[tree$data$id %in% visited, ],
-              parent_sep = tree$parent_sep,
-              ancestor = tree$ancestor)
+    make_derived_tree(visited, tree)
 }
