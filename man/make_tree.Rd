@@ -8,21 +8,11 @@
   Convert data frame to tree structure.
 }
 \usage{
-make_tree(d, id = "id", parents = "parents", label = id,
-          parent_sep = ",")
+make_tree(d, parent_sep = ",")
 }
 \arguments{
   \item{d}{
     Data frame to be converted into a tree structure.
-  }
-  \item{id}{
-    Name of column in "d" with node ids.
-  }
-  \item{parents}{
-    Name of column in "d" with parent node ids.
-  }
-  \item{label}{
-    Name of column in "d" with node labels.
   }
   \item{parent_sep}{
     String separating parent ids in case of multiple parents.
@@ -30,6 +20,11 @@ make_tree(d, id = "id", parents = "parents", label = id,
 }
 \value{
   Returns a tree object.
+}
+\details{
+  The data frame must have the columns "id" and "parents" corresponding
+  to node identifiers and a (by default comma-separated) list of parent
+  node identifiers.
 }
 \examples{
 library(treeFun)

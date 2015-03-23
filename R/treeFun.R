@@ -2,20 +2,18 @@
 
 root_marker <- "root"
 
-make_tree <- function(d, id = "id", parents = "parents", label = id,
-                      parent_sep = ",")
+make_tree <- function(d, parent_sep = ",")
 {
     make_node <- function(x)
     {
-        list(id       = as.character(x[[id]]),
-             parents  = split_parents(x[[parents]], parent_sep),
-             children = character(0L),
-             label    = as.character(x[[label]]))
+        list(id       = as.character(x[["id"]]),
+             parents  = split_parents(x[["parents"]], parent_sep),
+             children = character(0L))
     }
 
     ## Create nodes.
-    nodes <- apply(d, 1L, make_node)
-    node_ids <- as.character(d[[id]])
+    nodes <- apply(d[, c("id", "parents")], 1L, make_node)
+    node_ids <- as.character(d[["id"]])
     names(nodes) <- node_ids
 
     ## Add children to parent nodes and find root node.
@@ -42,7 +40,7 @@ make_tree <- function(d, id = "id", parents = "parents", label = id,
     if (is.na(root))
         stop("Couldn't find root node.")
 
-    list(root = root, nodes = nodes)
+    list(root = root, nodes = nodes, data = d)
 }
 
 is_root <- function(node)
@@ -136,20 +134,16 @@ induced_tree <- function(ids, tree)
         f(id)
 
     ## Build subtree from upstream nodes.
-    make_tree(data.frame(
-        id      = visited,
-        parents = sapply(lapply(nodes[visited], `[[`, "parents"), combine_parents),
-        label   = sapply(nodes[visited], `[[`, "label")))
+    make_tree(tree$data[tree$data$id %in% visited, ])
 }
 
 overlap_tree <- function(trees)
 {
     common_nodes <- Reduce(intersect,
                            lapply(trees, function(x) names(x$nodes)))
-    make_tree(data.frame(
-        id      = common_nodes,
-        parents = sapply(lapply(trees[[1]]$nodes[common_nodes], `[[`, "parents"), combine_parents),
-        label   = sapply(trees[[1]]$nodes[common_nodes], `[[`, "label")))
+
+    d <- trees[[1L]]$data
+    make_tree(d[d$id %in% common_nodes, ])
 }
 
 nodes <- function(tree)
@@ -197,9 +191,6 @@ extract_tree <- function(tree, depth, from = tree$root)
             f(child, n - 1L)
     }
     f(as.character(from), depth)
-    make_tree(data.frame(
-        id      = visited,
-        parents = sapply(lapply(tree$nodes[visited], `[[`, "parents"), combine_parents),
-        label   = sapply(tree$nodes[visited], `[[`, "label")),
-              label = "label")
+
+    make_tree(tree$data[tree$data$id %in% visited, ])
 }
