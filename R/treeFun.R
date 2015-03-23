@@ -184,10 +184,7 @@ nodes <- function(tree)
 
 edges <- function(tree)
 {
-    data.frame(
-        id      = names(tree$nodes),
-        parents = sapply(lapply(tree$nodes, `[[`, "parents"), combine_parents),
-        stringsAsFactors = FALSE)
+    tree$data[, c("id", "parents")]
 }
 
 tree_equal <- function(tree1, tree2)
