@@ -198,3 +198,57 @@ id parents label
     expect_that(tree_equal(extract_tree(tr, 3, 8), make_tree(d["8",])), is_true())
     expect_that(tree_equal(extract_tree(tr, 999), tr), is_true())
 })
+
+test_that("printing functions work", {
+    d1 <- read.table(textConnection("\
+id parents label
+0 - a
+1 0 b
+2 0 c
+3 1 d
+4 1 e
+5 1,6 f
+6 2 g
+7 2,1 h
+8 7 i
+"), header = TRUE, stringsAsFactors = FALSE, colClasses = "character")
+
+    ##         0a
+    ##        / \
+    ##      /     \
+    ##    1b       2c
+    ##   /|\\____ /_\___
+    ##  / | \    /   \ v
+    ## 3d 4e 5f 6g    7h
+    ##       ^   |     \
+    ##       |___|      \
+    ##                   8i
+    ##
+    ## 1 is parent of 7
+    ## 6 is parent of 5
+
+    rownames(d1) <- d1$id
+    tr <- make_tree(d1)
+
+    nodef <- function(id, d)
+    {
+        x <- double_quote(d[d$id == id, "label"])
+        pr1("[label=", x, "]")
+    }
+
+    edgef <- function(start, end, d)
+    {
+        x1 <- d[d$id == start, "label"]
+        x2 <- d[d$id == end,   "label"]
+        pr1("[label=", double_quote(paste0(x1, "->", x2)), "]")
+    }
+
+    tr_default <- capture.output(print_tree(tr))
+    tr_custom  <- capture.output(print_tree(tr, nodef, edgef))
+
+    s_default <- readLines("test_data/tree1_default.dot")
+    s_custom  <- readLines("test_data/tree1_custom.dot")
+
+    expect_that(all(tr_default == s_default), is_true())
+    expect_that(all(tr_custom == s_custom),   is_true())
+})

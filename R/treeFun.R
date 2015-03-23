@@ -48,8 +48,9 @@ is_root <- function(node)
     root_marker %in% names(node)
 }
 
-print_nodes <- function(tree)
+print_nodes <- function(tree, nodef)
 {
+    data <- tree$data
     nodes <- tree$nodes
     visited <- character(0L)
 
@@ -62,7 +63,10 @@ print_nodes <- function(tree)
 
         ## Print current node.
         node <- nodes[[id]]
-        pr("\"", id, "\"", "[label=\"", node$label, "\"];")
+        ## Quote ids to avoid problems.
+        pr1(double_quote(id))
+        nodef(id, data)
+        pr(";")
 
         ## Print child nodes.
         for (child in node$children)
@@ -71,30 +75,49 @@ print_nodes <- function(tree)
     f(tree$root)
 }
 
-print_edges <- function(tree)
+print_edges <- function(tree, edgef)
 {
-    f <- function(root, nodes)
+    data <- tree$data
+    nodes <- tree$nodes
+    visited <- character()
+
+    f <- function(root)
     {
+        if (root %in% visited)          # already been here
+            return()
+        else
+            visited <<- c(root, visited) # remember node
+
+        d <- nodes$data
         for (child in nodes[[root]]$children) {
-            pr("\"", root, "\"->\"", child, "\";")
-            f(child, nodes)
+            pr1(double_quote(root), "->", double_quote(child))
+            edgef(root, child, data)
+            pr(";")
+            f(child)
         }
     }
-    f(tree$root, tree$nodes)
+    f(tree$root)
 }
 
-print_tree <- function(tree)
+print_tree <- function(tree, nodef = NULL, edgef = NULL)
 {
+    if (is.null(nodef))
+        ## Use node id as label by default.
+        nodef <- function(id, data) pr1("[label=", double_quote(id), "]")
+
+    if (is.null(edgef))
+        edgef <- function(from, to, data) return("")
+
     pr("digraph {")
-    print_nodes(tree)
-    print_edges(tree)
+    print_nodes(tree, nodef)
+    print_edges(tree, edgef)
     pr("}")
 }
 
-tree2dot <- function(tree, filename)
+tree2dot <- function(tree, filename, ...)
 {
     sink(filename)
-    print_tree(tree)
+    print_tree(tree, ...)
     sink()
 }
 

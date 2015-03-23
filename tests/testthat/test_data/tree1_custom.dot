@@ -1,0 +1,21 @@
+digraph {
+"0"[label="a"];
+"2"[label="c"];
+"7"[label="h"];
+"8"[label="i"];
+"6"[label="g"];
+"5"[label="f"];
+"1"[label="b"];
+"4"[label="e"];
+"3"[label="d"];
+"0"->"2"[label="a->c"];
+"2"->"7"[label="c->h"];
+"7"->"8"[label="h->i"];
+"2"->"6"[label="c->g"];
+"6"->"5"[label="g->f"];
+"0"->"1"[label="a->b"];
+"1"->"7"[label="b->h"];
+"1"->"5"[label="b->f"];
+"1"->"4"[label="b->e"];
+"1"->"3"[label="b->d"];
+}

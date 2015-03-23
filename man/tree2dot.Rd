@@ -12,7 +12,7 @@
   (www.graphviz.org).
 }
 \usage{
-tree2dot(tree, filename)
+tree2dot(tree, filename, ...)
 }
 \arguments{
   \item{tree}{
@@ -21,6 +21,9 @@ tree2dot(tree, filename)
   \item{filename}{
     Name of output file.
   }
+  \item{...}{
+    Arguments passed to \code{print_tree} like "nodef" and "edgef".
+  }
 }
 \value{
   Produces a file in dot format that can be converted into a picture
@@ -28,6 +31,12 @@ tree2dot(tree, filename)
   (www.graphviz.org).  For example, to convert the file "foo.dot" into
   the png file "foo.dot.png" you could run "dot -Tpng -O foo.dot" from
   the command line.
+}
+\details{
+  You can change the way your trees are annotated by passing your own
+  functions for printing dot format node and edge attributes to
+  "tree2dot" via arguments "nodef" and "edgef" that get passed to
+  "print_tree" (see \code{print_tree}).
 }
 \seealso{
   \code{\link{make_tree}}
