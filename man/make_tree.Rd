@@ -8,7 +8,7 @@
   Convert data frame to tree structure.
 }
 \usage{
-make_tree(d, parent_sep = ",")
+make_tree(d, parent_sep = ",", ancestor = NULL)
 }
 \arguments{
   \item{d}{
@@ -16,6 +16,10 @@ make_tree(d, parent_sep = ",")
   }
   \item{parent_sep}{
     String separating parent ids in case of multiple parents.
+  }
+  \item{ancestor}{
+    Random id identifying the initial tree from which the tree defined
+    by "d" was derived.
   }
 }
 \value{
@@ -25,6 +29,13 @@ make_tree(d, parent_sep = ",")
   The data frame must have the columns "id" and "parents" corresponding
   to node identifiers and a (by default comma-separated) list of parent
   node identifiers.
+
+  The "ancestor" argument should not be specified unless the tree in "d"
+  was derived from another tree in which case "ancestor" should be set
+  to the latter tree's "ancestor".  The "ancestor" id is needed to make
+  sure that whenever we operate on more than one tree, all trees derive
+  from the same ancestor and are thus compatible in terms of nodes,
+  edges, and supplementary data.
 }
 \examples{
 library(treeFun)

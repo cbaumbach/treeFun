@@ -2,7 +2,7 @@
 
 root_marker <- "root"
 
-make_tree <- function(d, parent_sep = ",")
+make_tree <- function(d, parent_sep = ",", ancestor = NULL)
 {
     make_node <- function(x)
     {
@@ -40,7 +40,10 @@ make_tree <- function(d, parent_sep = ",")
     if (is.na(root))
         stop("Couldn't find root node.")
 
-    list(root = root, nodes = nodes, data = d)
+    if (is.null(ancestor))
+        ancestor <- sample.int(999999L, 1L) # create random ancestor id
+
+    list(root = root, nodes = nodes, data = d, ancestor = ancestor)
 }
 
 is_root <- function(node)
@@ -157,7 +160,8 @@ induced_tree <- function(ids, tree)
         f(id)
 
     ## Build subtree from upstream nodes.
-    make_tree(tree$data[tree$data$id %in% visited, ])
+    make_tree(tree$data[tree$data$id %in% visited, ],
+              ancestor = tree$ancestor)
 }
 
 overlap_tree <- function(trees)
@@ -166,7 +170,8 @@ overlap_tree <- function(trees)
                            lapply(trees, function(x) names(x$nodes)))
 
     d <- trees[[1L]]$data
-    make_tree(d[d$id %in% common_nodes, ])
+    make_tree(d[d$id %in% common_nodes, ],
+              ancestor = trees[[1L]]$ancestor)
 }
 
 nodes <- function(tree)
@@ -215,5 +220,6 @@ extract_tree <- function(tree, depth, from = tree$root)
     }
     f(as.character(from), depth)
 
-    make_tree(tree$data[tree$data$id %in% visited, ])
+    make_tree(tree$data[tree$data$id %in% visited, ],
+              ancestor = tree$ancestor)
 }
