@@ -6,9 +6,9 @@
 }
 \description{
   Write tree to dot file.  This is basically a wrapper around the
-  "print_tree" function that writes the dot format representation of the
-  given tree to a file for later conversion into a picture using tools
-  from the open source graph visualization software Graphviz
+  \code{print_tree} function that writes the dot format representation
+  of the given tree to a file for later conversion into a picture using
+  tools from the open source graph visualization software Graphviz
   (www.graphviz.org).
 }
 \usage{
@@ -22,21 +22,21 @@ tree2dot(tree, filename, ...)
     Name of output file.
   }
   \item{...}{
-    Arguments passed to \code{print_tree} like "nodef" and "edgef".
+    Arguments passed to \code{print_tree} like `nodef' and `edgef'.
   }
 }
 \value{
   Produces a file in dot format that can be converted into a picture
   using tools from the open source graph visualization software Graphviz
-  (www.graphviz.org).  For example, to convert the file "foo.dot" into
-  the png file "foo.dot.png" you could run "dot -Tpng -O foo.dot" from
+  (www.graphviz.org).  For example, to convert the file `foo.dot' into
+  the png file `foo.dot.png' you could run `dot -Tpng -O foo.dot' from
   the command line.
 }
 \details{
   You can change the way your trees are annotated by passing your own
   functions for printing dot format node and edge attributes to
-  "tree2dot" via arguments "nodef" and "edgef" that get passed to
-  "print_tree" (see \code{print_tree}).
+  \code{tree2dot} via arguments `nodef' and `edgef' that get passed to
+  \code{print_tree}.
 }
 \seealso{
   \code{\link{make_tree}}

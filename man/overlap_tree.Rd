@@ -16,7 +16,7 @@ overlap_tree(trees)
   }
 }
 \value{
-  Returns the largest tree that is a subtree of all trees in "trees".
+  Returns the largest tree that is a subtree of all trees in `trees'.
 }
 \seealso{
   \code{\link{make_tree}}

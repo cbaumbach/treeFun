@@ -19,8 +19,8 @@ induced_tree(ids, tree)
   }
 }
 \value{
-  Returns the subtree of "tree" that is induced by "ids", that is, the
-  tree consisting of the nodes of "tree" with ids in "ids" and all their
+  Returns the subtree of `tree' that is induced by `ids', that is, the
+  tree consisting of the nodes of `tree' with ids in `ids' and all their
   ancestor nodes.
 }
 \seealso{

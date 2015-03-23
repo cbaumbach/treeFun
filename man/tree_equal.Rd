@@ -21,7 +21,7 @@ tree_equal(tree1, tree2)
   }
 }
 \value{
-  Returns TRUE if "tree1" and "tree2" have the same edges.
+  Returns TRUE if `tree1' and `tree2' have the same edges.
 }
 \seealso{
   \code{\link{make_tree}}

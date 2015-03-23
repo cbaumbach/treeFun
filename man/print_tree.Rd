@@ -29,15 +29,15 @@ print_tree(tree, nodef = NULL, edgef = NULL)
   (www.graphviz.org) and look at that instead (see \code{tree2dot}).
 }
 \details{
-  The "nodef"/"edgef" functions should print dot format node/edge
-  attributes like '[label="node1"]' to standard output.  The "nodef"
+  The `nodef'/`edgef' functions should print dot format node/edge
+  attributes like `[label="node1"]' to standard output.  The `nodef'
   function is called with two arguments: the current node id and a data
-  frame.  The "edgef" function is called with three arguments: the id of
+  frame.  The `edgef' function is called with three arguments: the id of
   the node where the edge starts (the parent node), the id of the node
   where the edge ends (the child node), and a data frame.  In both
   cases, the data frame is the one that was used to construct the
-  initial tree object (an ancestor of "tree") using \code{make_tree}.
-  Rows corresponding to nodes that are not in "tree" were removed from
+  initial tree object (an ancestor of `tree') using \code{make_tree}.
+  Rows corresponding to nodes that are not in `tree' were removed from
   the data frame.  By default, nodes are labeled with their id and edges
   are drawn as arrows from parent to child without any label.
 }

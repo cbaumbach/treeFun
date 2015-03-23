@@ -15,14 +15,14 @@ extract_tree(tree, depth, from = tree$root)
     Tree object from which to extract subtree.
   }
   \item{depth}{
-    Number of levels to extract from tree object.
+    Number of levels to extract from `tree'.
   }
   \item{from}{
     Id of node where extraction should begin.
   }
 }
 \value{
-  Returns a subtree of "tree".
+  Returns a subtree of `tree'.
 }
 \examples{
 library(treeFun)
