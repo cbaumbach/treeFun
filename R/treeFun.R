@@ -29,7 +29,7 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL)
             if (!is.na(root))
                 stop("Found >=1 root node: ", root, ", ", child)
             root <- child
-            nodes[[root]]$root <- TRUE  # add root marker
+            nodes[[root]][[root_marker]] <- TRUE # add root marker
             next
         }
 
