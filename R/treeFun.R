@@ -166,6 +166,9 @@ induced_tree <- function(ids, tree)
 
 overlap_tree <- function(trees)
 {
+    if (!all_neighbors(`==`, sapply(trees, `[[`, "ancestor")))
+        stop("Trees must have a common ancestor.")
+
     common_nodes <- Reduce(intersect,
                            lapply(trees, function(x) names(x$nodes)))
 

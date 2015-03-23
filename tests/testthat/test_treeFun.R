@@ -150,7 +150,10 @@ id parents label
     ## 6 is parent of 5
 
     rownames(d) <- d$id
+
+    set.seed(12345L)
     tr <- make_tree(d)
+    tr2 <- make_tree(d)                 # different ancestor id
 
     expect_that(tree_equal(induced_tree("5", tr), make_tree(d[c("0", "1", "2", "5", "6"),])), is_true())
     expect_that(tree_equal(overlap_tree(list(tr, tr)), tr), is_true())
@@ -159,6 +162,7 @@ id parents label
     expect_that(tree_equal(overlap_tree(list(tr, tr, induced_tree("5", tr), tr)), induced_tree("5", tr)), is_true())
     expect_that(tree_equal(overlap_tree(list(induced_tree("5", tr), induced_tree("6", tr))), induced_tree("6", tr)), is_true())
     expect_that(tree_equal(overlap_tree(list(induced_tree("3", tr), induced_tree("8", tr))), induced_tree("1", tr)), is_true())
+    expect_that(overlap_tree(list(tr, tr2)), throws_error("Trees must have a common ancestor."))
 })
 
 test_that("downstream extracting of subtrees works", {
