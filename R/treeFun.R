@@ -43,11 +43,14 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL)
     if (is.null(ancestor))
         ancestor <- sample.int(999999L, 1L) # create random ancestor id
 
-    list(root       = root,
-         nodes      = nodes,
-         data       = d,
-         parent_sep = parent_sep,
-         ancestor   = ancestor)
+    tr <- list(root       = root,
+               nodes      = nodes,
+               data       = d,
+               parent_sep = parent_sep,
+               ancestor   = ancestor)
+
+    class(tr) <- c("tree", class(tr))
+    tr
 }
 
 make_derived_tree <- function(node_ids, tree)
