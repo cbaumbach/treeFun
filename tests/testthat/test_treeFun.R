@@ -247,8 +247,8 @@ id parents label
         pr1("[label=", double_quote(paste0(x1, "->", x2)), "]")
     }
 
-    tr_default <- capture.output(print_tree(tr))
-    tr_custom  <- capture.output(print_tree(tr, nodef, edgef))
+    tr_default <- capture.output(print(tr))
+    tr_custom  <- capture.output(print(tr, nodef, edgef))
 
     s_default <- readLines("test_data/tree1_default.dot")
     s_custom  <- readLines("test_data/tree1_custom.dot")

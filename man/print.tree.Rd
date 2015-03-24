@@ -1,5 +1,5 @@
-\name{print_tree}
-\alias{print_tree}
+\name{print.tree}
+\alias{print.tree}
 \docType{package}
 \title{
   Show tree representation in dot format
@@ -8,10 +8,10 @@
   Show tree representation in dot format
 }
 \usage{
-print_tree(tree, nodef = NULL, edgef = NULL)
+\method{print}{tree}(x, nodef = NULL, edgef = NULL, \dots)
 }
 \arguments{
-  \item{tree}{
+  \item{x}{
     Tree object.
   }
   \item{nodef}{
@@ -19,6 +19,9 @@ print_tree(tree, nodef = NULL, edgef = NULL)
   }
   \item{edgef}{
     Function for printing node attributes in dot format.
+  }
+  \item{...}{
+    Ignored.
   }
 }
 \value{
@@ -72,5 +75,5 @@ id parents label
 ##                  \
 ##                   8i
 
-print_tree(make_tree(d))
+print(make_tree(d))
 }

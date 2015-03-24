@@ -52,6 +52,6 @@ id parents label
 ##                   8i
 
 tr <- make_tree(d)
-print_tree(extract_tree(tr, 2))
-print_tree(extract_tree(tr, 2, from = "1"))
+print(extract_tree(tr, 2))
+print(extract_tree(tr, 2, from = "1"))
 }

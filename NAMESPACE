@@ -6,6 +6,6 @@ export("edges",
        "make_tree",
        "nodes",
        "overlap_tree",
-       "print_tree",
+       "print.tree",
        "tree_equal",
        "tree2dot")

@@ -116,7 +116,7 @@ print_edges <- function(tree, edgef)
     f(tree$root)
 }
 
-print_tree <- function(tree, nodef = NULL, edgef = NULL)
+print.tree <- function(x, nodef = NULL, edgef = NULL, ...)
 {
     if (is.null(nodef))
         ## Use node id as label by default.
@@ -126,15 +126,15 @@ print_tree <- function(tree, nodef = NULL, edgef = NULL)
         edgef <- function(from, to, data) return("")
 
     pr("digraph {")
-    print_nodes(tree, nodef)
-    print_edges(tree, edgef)
+    print_nodes(x, nodef)
+    print_edges(x, edgef)
     pr("}")
 }
 
 tree2dot <- function(tree, filename, ...)
 {
     sink(filename)
-    print_tree(tree, ...)
+    print(tree, ...)
     sink()
 }
 
