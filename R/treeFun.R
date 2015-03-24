@@ -69,14 +69,11 @@ print_nodes <- function(tree, nodef)
 {
     data <- tree$data
     nodes <- tree$nodes
-    visited <- character(0L)
+    seen <- make_observer()
 
     f <- function(id)
     {
-        ## Don't print twice.
-        if (id %in% visited)
-            return()
-        visited <<- c(id, visited)
+        if (seen(id)) return()          # already been here
 
         ## Print current node.
         node <- nodes[[id]]
@@ -96,14 +93,11 @@ print_edges <- function(tree, edgef)
 {
     data <- tree$data
     nodes <- tree$nodes
-    visited <- character()
+    seen <- make_observer()
 
     f <- function(root)
     {
-        if (root %in% visited)          # already been here
-            return()
-        else
-            visited <<- c(root, visited) # remember node
+        if (seen(root)) return()        # alreayd been here
 
         d <- nodes$data
         for (child in nodes[[root]]$children) {
@@ -151,14 +145,11 @@ combine_parents <- function(parents, parent_sep = ",")
 induced_tree <- function(ids, tree)
 {
     nodes <- tree$nodes
-    visited <- character()
+    seen <- make_observer()
 
     f <- function(id)
     {
-        if (id %in% visited)            # already been here
-            return()
-
-        visited <<- c(id, visited)      # add id to visited nodes
+        if (seen(id)) return()          # already been here
 
         node <- nodes[[id]]
         parents <- node$parents
@@ -174,7 +165,7 @@ induced_tree <- function(ids, tree)
         f(id)
 
     ## Build subtree from upstream nodes.
-    make_derived_tree(visited, tree)
+    make_derived_tree(seen(show = TRUE), tree)
 }
 
 overlap_tree <- function(trees)
@@ -220,16 +211,17 @@ extract_tree <- function(tree, depth, from = tree$root)
         stop("DEPTH must be >= 1L.")
 
     nodes <- tree$nodes
-    visited <- character()
+    seen <- make_observer()
+
     f <- function(root, n)
     {
-        if (root %in% visited) return()
-        visited <<- c(root, visited)
+        if (seen(root)) return()        # already been here
+
         if (n == 1L) return()
         for (child in nodes[[root]]$children)
             f(child, n - 1L)
     }
     f(as.character(from), depth)
 
-    make_derived_tree(visited, tree)
+    make_derived_tree(seen(show = TRUE), tree)
 }
