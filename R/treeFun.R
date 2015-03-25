@@ -2,7 +2,8 @@
 
 root_marker <- "root"
 
-make_tree <- function(d, parent_sep = ",", ancestor = NULL)
+make_tree <- function(d, parent_sep = ",", ancestor = NULL,
+                      attrib = NULL)
 {
     make_node <- function(x)
     {
@@ -49,7 +50,12 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL)
                parent_sep = parent_sep,
                ancestor   = ancestor)
 
-    class(tr) <- c("tree", class(tr))
+    if (!is.null(attrib))
+        attributes(tr) <- attrib
+
+    if (!inherits(tr, "tree"))
+        class(tr) <- c("tree", class(tr))
+
     tr
 }
 
@@ -57,7 +63,8 @@ make_derived_tree <- function(node_ids, tree)
 {
     make_tree(tree$data[tree$data$id %in% node_ids, ],
               parent_sep = tree$parent_sep,
-              ancestor = tree$ancestor)
+              ancestor   = tree$ancestor,
+              attrib     = attributes(tree))
 }
 
 is_root <- function(node)

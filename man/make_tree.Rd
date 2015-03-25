@@ -8,7 +8,7 @@
   Convert data frame to tree structure.
 }
 \usage{
-make_tree(d, parent_sep = ",", ancestor = NULL)
+make_tree(d, parent_sep = ",", ancestor = NULL, attrib = NULL)
 }
 \arguments{
   \item{d}{
@@ -21,9 +21,12 @@ make_tree(d, parent_sep = ",", ancestor = NULL)
     Random id identifying the initial tree from which the tree defined
     by `d' was derived.
   }
+  \item{attrib}{
+    Attributes to be attached to final tree structure.
+  }
 }
 \value{
-  Returns a tree object.
+  Returns an object of S3 class `tree'.
 }
 \details{
   The data frame must have the columns `id' and `parents' corresponding
@@ -64,5 +67,5 @@ id parents label
 ##                  \
 ##                   8i
 
-\dontrun{tree2dot(make_tree(d))}
+print(make_tree(d))
 }
