@@ -77,6 +77,7 @@ print_nodes <- function(tree, nodef)
     data <- tree$data
     nodes <- tree$nodes
     seen <- make_observer()
+    attrib <- attributes(tree)
 
     f <- function(id)
     {
@@ -86,7 +87,7 @@ print_nodes <- function(tree, nodef)
         node <- nodes[[id]]
         ## Quote ids to avoid problems.
         pr1(double_quote(id))
-        nodef(id, data)
+        nodef(id, data, attrib)
         pr(";")
 
         ## Print child nodes.
@@ -101,6 +102,7 @@ print_edges <- function(tree, edgef)
     data <- tree$data
     nodes <- tree$nodes
     seen <- make_observer()
+    attrib <- attributes(tree)
 
     f <- function(root)
     {
@@ -109,7 +111,7 @@ print_edges <- function(tree, edgef)
         d <- nodes$data
         for (child in nodes[[root]]$children) {
             pr1(double_quote(root), "->", double_quote(child))
-            edgef(root, child, data)
+            edgef(root, child, data, attrib)
             pr(";")
             f(child)
         }
@@ -121,10 +123,10 @@ print.tree <- function(x, nodef = NULL, edgef = NULL, ...)
 {
     if (is.null(nodef))
         ## Use node id as label by default.
-        nodef <- function(id, data) pr1("[label=", double_quote(id), "]")
+        nodef <- function(id, data, attrib) pr1("[label=", double_quote(id), "]")
 
     if (is.null(edgef))
-        edgef <- function(from, to, data) return("")
+        edgef <- function(from, to, data, attrib) return("")
 
     pr("digraph {")
     print_nodes(x, nodef)

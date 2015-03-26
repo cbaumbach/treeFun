@@ -235,13 +235,13 @@ id parents label
     rownames(d1) <- d1$id
     tr <- make_tree(d1)
 
-    nodef <- function(id, d)
+    nodef <- function(id, d, attrib)
     {
         x <- double_quote(d[d$id == id, "label"])
         pr1("[label=", x, "]")
     }
 
-    edgef <- function(start, end, d)
+    edgef <- function(start, end, d, attrib)
     {
         x1 <- d[d$id == start, "label"]
         x2 <- d[d$id == end,   "label"]
