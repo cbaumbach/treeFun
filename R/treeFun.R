@@ -151,6 +151,9 @@ combine_parents <- function(parents, parent_sep = ",")
 
 induced_tree <- function(ids, tree)
 {
+    if (length(ids) == 0L)
+        stop("IDS must be of length >= 1.")
+
     nodes <- tree$nodes
     seen <- make_observer()
 
