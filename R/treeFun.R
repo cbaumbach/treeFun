@@ -175,7 +175,9 @@ induced_tree <- function(ids, tree)
         f(id)
 
     ## Build subtree from upstream nodes.
-    make_derived_tree(seen(show = TRUE), tree)
+    tr <- make_derived_tree(seen(show = TRUE), tree)
+    attr(tr, "induced_by") <- ids
+    tr
 }
 
 overlap_tree <- function(trees)
