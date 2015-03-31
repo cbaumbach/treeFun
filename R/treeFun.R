@@ -61,7 +61,7 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL,
 
 make_derived_tree <- function(node_ids, tree)
 {
-    make_tree(tree$data[tree$data$id %in% node_ids, ],
+    make_tree(tree$data[tree$data$id %in% node_ids, , drop = FALSE],
               parent_sep = tree$parent_sep,
               ancestor   = tree$ancestor,
               attrib     = attributes(tree))
@@ -200,7 +200,7 @@ nodes <- function(tree)
 
 edges <- function(tree)
 {
-    tree$data[, c("id", "parents")]
+    tree$data[, c("id", "parents"), drop = FALSE]
 }
 
 tree_equal <- function(tree1, tree2)
