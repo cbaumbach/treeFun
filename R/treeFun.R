@@ -5,16 +5,16 @@ root_marker <- "root"
 make_tree <- function(d, parent_sep = ",", ancestor = NULL,
                       attrib = NULL)
 {
-    make_node <- function(x)
+    make_node <- function(id, parents)
     {
-        list(id       = as.character(x[["id"]]),
-             parents  = split_parents(x[["parents"]], parent_sep),
+        list(id       = as.character(id),
+             parents  = split_parents(parents, parent_sep),
              children = character(0L))
     }
 
     ## Create nodes.
-    nodes <- apply(d[, c("id", "parents")], 1L, make_node)
-    node_ids <- as.character(d[["id"]])
+    nodes <- Map(make_node, d$id, d$parents)
+    node_ids <- as.character(d$id)
     names(nodes) <- node_ids
 
     ## Add children to parent nodes and find root node.
