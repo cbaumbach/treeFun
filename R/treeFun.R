@@ -126,7 +126,7 @@ print_edges <- function(tree, edgef)
     f(tree$root)
 }
 
-print.tree <- function(x, nodef = NULL, edgef = NULL, ...)
+print.tree <- function(x, nodef = NULL, edgef = NULL, main = NULL, ...)
 {
     if (nrow(x$data) == 0L) {
         pr("/* empty tree */")
@@ -141,6 +141,12 @@ print.tree <- function(x, nodef = NULL, edgef = NULL, ...)
         edgef <- function(from, to, data, attrib) return("")
 
     pr("digraph {")
+    if (!is.null(main)) {
+        ## Put label in top left corner of graph
+        pr("label = ", double_quote(main))
+        pr("labelloc = \"t\"")
+        pr("labeljust = \"l\"")
+    }
     print_nodes(x, nodef)
     print_edges(x, edgef)
     pr("}")
