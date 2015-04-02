@@ -38,7 +38,7 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL,
             nodes[[pid]]$children <- c(child, nodes[[pid]]$children)
     }
 
-    if (is.na(root))
+    if (nrow(d) > 0L && is.na(root))
         stop("Couldn't find root node.")
 
     if (is.null(ancestor))
@@ -61,10 +61,17 @@ make_tree <- function(d, parent_sep = ",", ancestor = NULL,
 
 make_derived_tree <- function(node_ids, tree)
 {
+    ## If node_ids is empty, we return an empty tree.  Setting
+    ## node_ids to NULL ensures this since `x %in% NULL' (in the below
+    ## call to `make_tree') returns all FALSE and selects 0 rows.
+    if (length(node_ids) == 0L)
+        node_ids <- NULL
+
     make_tree(tree$data[tree$data$id %in% node_ids, , drop = FALSE],
               parent_sep = tree$parent_sep,
               ancestor   = tree$ancestor,
               attrib     = attributes(tree))
+
 }
 
 is_root <- function(node)
@@ -121,6 +128,11 @@ print_edges <- function(tree, edgef)
 
 print.tree <- function(x, nodef = NULL, edgef = NULL, ...)
 {
+    if (nrow(x$data) == 0L) {
+        pr("/* empty tree */")
+        return()
+    }
+
     if (is.null(nodef))
         ## Use node id as label by default.
         nodef <- function(id, data, attrib) pr1("[label=", double_quote(id), "]")
@@ -153,8 +165,10 @@ combine_parents <- function(parents, parent_sep = ",")
 
 induced_tree <- function(ids, tree)
 {
-    if (length(ids) == 0L)
-        stop("IDS must be of length >= 1.")
+    if (length(ids) == 0L) {
+        empty_tree <- make_derived_tree(character(), tree)
+        return(empty_tree)
+    }
 
     nodes <- tree$nodes
     seen <- make_observer()

@@ -107,7 +107,6 @@ id parents label
 
     tr <- make_tree(d)
 
-    expect_that(induced_tree(character(), tr), throws_error("IDS must be of length >= 1."))
     expect_that(tree_equal(induced_tree("6", tr),         make_tree(d[c("0", "2", "6"),])),           is_true())
     expect_that(tree_equal(induced_tree("8", tr),         make_tree(d[c("0", "2", "7", "8"),])),      is_true())
     expect_that(tree_equal(induced_tree("7", tr),         make_tree(d[c("0", "2", "7"),])),           is_true())
