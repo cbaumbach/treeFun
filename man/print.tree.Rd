@@ -8,7 +8,7 @@
   Show tree representation in dot format
 }
 \usage{
-\method{print}{tree}(x, nodef = NULL, edgef = NULL, \dots)
+\method{print}{tree}(x, nodef = NULL, edgef = NULL, main = NULL, \dots)
 }
 \arguments{
   \item{x}{
@@ -19,6 +19,9 @@
   }
   \item{edgef}{
     Function for printing node attributes in dot format.
+  }
+  \item{main}{
+    Title used for printed tree.
   }
   \item{...}{
     Ignored.
