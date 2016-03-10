@@ -1,7 +1,7 @@
 context("Working with tree structures.")
 
 test_that("transforming from and to data frames works", {
-    d <- read.table(textConnection("\
+    d <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
@@ -36,7 +36,7 @@ id parents label
 })
 
 test_that("tree comparisons work", {
-    d1 <- read.table(textConnection("\
+    d1 <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
@@ -79,7 +79,7 @@ id parents label
 })
 
 test_that("induced and overlap trees work", {
-    d <- read.table(textConnection("\
+    d <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
@@ -122,7 +122,7 @@ id parents label
 })
 
 test_that("children with multiple parents are handled correctly", {
-    d <- read.table(textConnection("\
+    d <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
@@ -166,7 +166,7 @@ id parents label
 })
 
 test_that("downstream extracting of subtrees works", {
-    d <- read.table(textConnection("\
+    d <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
@@ -204,7 +204,7 @@ id parents label
 })
 
 test_that("printing functions work", {
-    d1 <- read.table(textConnection("\
+    d1 <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
@@ -258,7 +258,7 @@ id parents label
 })
 
 test_that("parent_sep is inherited by derived trees", {
-    d <- read.table(textConnection("\
+    d <- utils::read.table(textConnection("\
 id parents label
 0 - a
 1 0 b
